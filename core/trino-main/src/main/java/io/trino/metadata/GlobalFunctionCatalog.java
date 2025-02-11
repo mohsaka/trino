@@ -23,6 +23,7 @@ import com.google.inject.Provider;
 import io.trino.connector.system.GlobalSystemConnector;
 import io.trino.operator.table.ExcludeColumnsFunction.ExcludeColumnsFunctionHandle;
 import io.trino.operator.table.SequenceFunction.SequenceFunctionHandle;
+import io.trino.operator.table.SessionizeFunction.SessionizeFunctionHandle;
 import io.trino.operator.table.json.JsonTable.JsonTableFunctionHandle;
 import io.trino.spi.function.AggregationFunctionMetadata;
 import io.trino.spi.function.AggregationImplementation;
@@ -56,6 +57,7 @@ import static io.trino.metadata.OperatorNameUtil.isOperatorName;
 import static io.trino.metadata.OperatorNameUtil.mangleOperatorName;
 import static io.trino.metadata.OperatorNameUtil.unmangleOperator;
 import static io.trino.operator.table.ExcludeColumnsFunction.getExcludeColumnsFunctionProcessorProvider;
+import static io.trino.operator.table.SessionizeFunction.getSessionizeFunctionProcessorProvider;
 import static io.trino.operator.table.SequenceFunction.getSequenceFunctionProcessorProvider;
 import static io.trino.operator.table.json.JsonTable.getJsonTableFunctionProcessorProvider;
 import static io.trino.spi.function.FunctionKind.AGGREGATE;
@@ -207,6 +209,9 @@ public class GlobalFunctionCatalog
         }
         if (functionHandle instanceof JsonTableFunctionHandle) {
             return getJsonTableFunctionProcessorProvider(metadata.get(), typeManager.get(), functionManager.get());
+        }
+        if (functionHandle instanceof SessionizeFunctionHandle) {
+            return getSessionizeFunctionProcessorProvider();
         }
 
         return null;

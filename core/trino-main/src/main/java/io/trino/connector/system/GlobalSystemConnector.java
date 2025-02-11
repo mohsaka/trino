@@ -16,6 +16,7 @@ package io.trino.connector.system;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import io.trino.operator.table.SequenceFunction.SequenceFunctionHandle;
+import io.trino.operator.table.SessionizeFunction.SessionizeFunctionHandle;
 import io.trino.spi.catalog.CatalogName;
 import io.trino.spi.connector.CatalogHandle;
 import io.trino.spi.connector.CatalogHandle.CatalogVersion;
@@ -35,6 +36,7 @@ import io.trino.transaction.TransactionId;
 import java.util.Set;
 
 import static io.trino.operator.table.SequenceFunction.getSequenceFunctionSplitSource;
+import static io.trino.operator.table.SessionizeFunction.getSessionizeFunctionSplitSource;
 import static io.trino.spi.connector.CatalogHandle.createRootCatalogHandle;
 import static java.util.Objects.requireNonNull;
 
@@ -96,6 +98,8 @@ public class GlobalSystemConnector
             {
                 if (functionHandle instanceof SequenceFunctionHandle sequenceFunctionHandle) {
                     return getSequenceFunctionSplitSource(sequenceFunctionHandle);
+                } else if (functionHandle instanceof SessionizeFunctionHandle sessionizeFunctionHandle) {
+                    return getSessionizeFunctionSplitSource(sessionizeFunctionHandle);
                 }
 
                 throw new UnsupportedOperationException();
